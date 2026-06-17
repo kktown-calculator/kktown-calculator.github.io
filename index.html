@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="images/NEW_KKTOWN_2023.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KKTown Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="dev-banner">⚠️ เว็บไซต์อยู่ระหว่างการพัฒนา - ข้อมูลอาจมีการเปลี่ยนแปลง</div>
+
+<header>
+  <div class="logo"><img src="images/NEW_KKTOWN_2023.png" alt="KKTown" style="height:44px;width:44px;object-fit:contain;"></div>
+  <div>
+    <h1>KKTown Calculator</h1>
+    <p>ระบบคำนวณเบนโตะและการแปรรูปวัตถุดิบ</p>
+  </div>
+  <button id="themeToggle" class="btn btn-ghost">🌙 Dark</button>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('bento', this)">🍱 คำนวณเบนโตะ</button>
+  <button class="tab-btn" onclick="switchTab('craft', this)">🎒 คราฟเบนโตะ</button>
+  <button class="tab-btn" onclick="switchTab('process', this)">⚙️ แปรรูปวัตถุดิบ</button>
+</div>
+
+<main>
+
+  <div class="page show" id="page-bento">
+    <div class="card">
+      <div class="card-title">จำนวนเบนโตะที่ต้องการทำ</div>
+      <div class="input-grid">
+        <div class="field">
+          <label>Bento 1</label>
+          <input type="number" id="b1" value="0" min="0">
+          <div class="hint">Milk · Rice · Sliced Pork · Wood · Sauce</div>
+        </div>
+        <div class="field">
+          <label>Bento 2</label>
+          <input type="number" id="b2" value="0" min="0">
+          <div class="hint">Milk · Grape · Papaya · Wood · Salt · Sugar</div>
+        </div>
+        <div class="field">
+          <label>Bento 3</label>
+          <input type="number" id="b3" value="0" min="0">
+          <div class="hint">Crab · Milk · Rice · Wood · Sauce · Sugar</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="calcBento()">คำนวณ</button>
+        <button class="btn btn-ghost"   onclick="clearBento()">ล้าง</button>
+      </div>
+    </div>
+
+    <div id="bento-howto" class="howto-card">
+    <div class="howto-title">💡 วิธีการใช้งานแท็บคำนวณเบนโตะ</div>
+    <ul>
+      <li>ระบุจำนวนเบนโตะแต่ละชนิดที่คุณต้องการทำในช่องด้านบน</li>
+      <li>กดปุ่ม <b>"คำนวณ"</b> เพื่อดูรายการวัตถุดิบทั้งหมดที่ต้องเตรียม น้ำหนักรวม และค่าใช้จ่ายในการคราฟ</li>
+      <li>สามารถใช้ "รายการตรวจสอบ" (Checklist) ด้านล่างเพื่อติ๊กเช็คของที่เตรียมแล้วได้</li>
+    </ul>
+    </div>
+
+    <div id="bento-result">
+      <div class="section-title">วัตถุดิบรวมทั้งหมด</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>วัตถุดิบ</th>
+              <th>จำนวน (แพ็ค)</th>
+              <th>ของที่ยังไม่แปรรูปที่ต้องการ</th>
+              <th>น้ำหนักที่ยังไม่แปรรูป (kg)</th>
+              <th>น้ำหนักแพ็ค (kg)</th>
+            </tr>
+          </thead>
+          <tbody id="ingred-body"></tbody>
+        </table>
+      </div>
+
+      <div class="section-title">รายการตรวจสอบ</div>
+      <div class="card" style="padding:0;overflow:hidden;" id="checklist-wrap"></div>
+
+      <div class="section-title">ค่าใช้จ่ายในการคราฟ</div>
+      <div class="tbl-wrap">
+        <table class="cost-table">
+          <tbody>
+            <tr>
+              <td>วัตถุดิบปรุงรส (Sauce / Salt / Sugar)</td>
+              <td id="cost-ingred-qty"></td>
+              <td class="cost-val" id="cost-ingred-val"></td>
+            </tr>
+            <tr>
+              <td>ค่าคราฟ</td>
+              <td id="cost-craft-qty"></td>
+              <td class="cost-val" id="cost-craft-val"></td>
+            </tr>
+            <tr class="total-row cost-total">
+              <td colspan="2">รวมทั้งหมด</td>
+              <td class="cost-val" id="cost-total-val"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-craft">
+    <div class="card">
+      <div class="card-title">ข้อมูลกระเป๋า</div>
+      <div class="input-grid-2" style="max-width:400px;">
+        <div class="field">
+          <label>น้ำหนักกระเป๋า (kg)</label>
+          <input type="number" id="craftBagWeight" value="0" min="0" step="0.1">
+          <div class="hint">น้ำหนักสูงสุดที่รับได้</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="calcCraftCapacity()">คำนวณ</button>
+        <button class="btn btn-ghost"   onclick="clearCraft()">ล้าง</button>
+      </div>
+    </div>
+
+    <div id="craft-howto" class="howto-card">
+    <div class="howto-title">🎒 วิธีการใช้งานแท็บคราฟเบนโตะ</div>
+    <ul>
+      <li>ระบุน้ำหนักกระเป๋า (kg) ปัจจุบันของคุณที่สามารถรองรับของได้</li>
+      <li>กดปุ่ม <b>"คำนวณ"</b> เพื่อดูว่าด้วยน้ำหนักกระเป๋าเท่านี้ คุณสามารถเบิกของมาคราฟเบนโตะแต่ละชนิดได้สูงสุดกี่ชุดต่อรอบ</li>
+    </ul>
+    </div>
+
+    <div id="craft-result" style="display:none;">
+      <div class="section-title">จำนวนเบนโตะที่คราฟได้ต่อรอบ</div>
+      <div id="craft-bento-panels"></div>
+    </div>
+  </div>
+
+  <div class="page" id="page-process">
+    <div class="card">
+      <div class="card-title">ข้อมูลการแปรรูป</div>
+      <div class="input-grid-2">
+        <div class="field">
+          <label>จำนวนวัตถุดิบที่ยังไม่แปรรูป (ชิ้น)</label>
+          <input type="number" id="rawQty" value="0" min="0">
+          <div class="hint">ของที่ยังไม่แปรรูปที่มีทั้งหมด</div>
+        </div>
+        <div class="field">
+          <label>น้ำหนักกระเป๋า (kg)</label>
+          <input type="number" id="bagWeight" value="0" min="0" step="0.1">
+          <div class="hint">น้ำหนักที่รับได้</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:16px;">อัตราแปรรูป</div>
+      <div class="input-grid-2">
+        <div class="field">
+          <label>ของที่ยังไม่แปรรูปที่ใช้ต่อครั้ง (ชิ้น)</label>
+          <input type="number" id="ratioIn" value="4" min="1">
+          <div class="hint">Input - ของที่ยังไม่แปรรูปที่ใส่เข้าไป</div>
+        </div>
+        <div class="field">
+          <label>แพ็คที่ได้ต่อครั้ง (ชิ้น)</label>
+          <input type="number" id="ratioOut" value="2" min="1">
+          <div class="hint">Output - แพ็คที่ได้ออกมา</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text-soft);margin-top:8px;">น้ำหนักของที่ยังไม่แปรรูป 0.2 kg/ชิ้น</div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="calcProcess()">คำนวณ</button>
+        <button class="btn btn-ghost"   onclick="clearProcess()">ล้าง</button>
+      </div>
+    </div>
+
+    <div id="process-howto" class="howto-card">
+    <div class="howto-title">⚙️ วิธีการใช้งานแท็บแปรรูปวัตถุดิบ</div>
+    <ul>
+      <li>ใส่จำนวน <b>วัตถุดิบที่ยังไม่แปรรูป</b> ทั้งหมดที่คุณมี และ <b>น้ำหนักกระเป๋า</b> ที่รับได้</li>
+      <li>ตั้งค่าอัตราการแปรรูป (เช่น ใส่ของที่ยังไม่แปรรูป 4 ชิ้น ได้ออกมา 2 แพ็ค)</li>
+      <li>กดปุ่ม <b>"คำนวณ"</b> เพื่อดูสรุปว่าต้องเดินแปรรูปทั้งหมดกี่รอบ และมีของที่ยังไม่แปรรูปเหลือเศษหรือไม่</li>
+    </ul>
+    </div>
+
+    <div id="proc-result">
+      <div class="section-title">สรุปการแปรรูป</div>
+      <div class="tbl-wrap">
+        <table>
+          <tbody>
+            <tr><td>ความจุกระเป๋า (ของที่ยังไม่แปรรูป)</td><td><span class="badge" id="p-capacity"></span></td></tr>
+            <tr><td>แปรรูปได้ต่อรอบ</td><td><span class="badge" id="p-per-round"></span></td></tr>
+            <tr><td>จำนวนรอบทั้งหมด</td><td><span class="badge" id="p-rounds"></span></td></tr>
+            <tr class="total-row"><td>แพ็คที่ได้ทั้งหมด</td><td id="p-total-packs"></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-title">รายละเอียดแต่ละรอบ</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>รอบ</th><th>ของดิบที่แปรรูป</th><th>แพ็คที่ได้</th></tr></thead>
+          <tbody id="rounds-body"></tbody>
+        </table>
+      </div>
+      <div id="proc-warn"></div>
+    </div>
+  </div>
+
+</main>
+
+<script src="main.js"></script>
+</body>
+</html>
