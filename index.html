@@ -6,7 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KKTown Calculator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -57,11 +58,11 @@
     </div>
 
     <div id="bento-howto" class="howto-card">
-    <div class="howto-title">💡 วิธีการใช้งานแท็บคำนวณเบนโตะ</div>
-    <ul>
-      <li>ระบุจำนวนเบนโตะแต่ละชนิดที่คุณต้องการทำในช่องด้านบน</li>
-      <li>กดปุ่ม <b>"คำนวณ"</b> เพื่อดูรายการวัตถุดิบทั้งหมดที่ต้องเตรียม น้ำหนักรวม และค่าใช้จ่ายในการคราฟ</li>
-      <li>สามารถใช้ "รายการตรวจสอบ" (Checklist) ด้านล่างเพื่อติ๊กเช็คของที่เตรียมแล้วได้</li>
+    <div class="howto-title"><span class="howto-icon">💡</span>วิธีการใช้งานแท็บคำนวณเบนโตะ</div>
+    <ul class="howto-steps">
+      <li><span class="howto-step-num">1</span><span>ระบุจำนวนเบนโตะแต่ละชนิดที่คุณต้องการทำในช่องด้านบน</span></li>
+      <li><span class="howto-step-num">2</span><span>กดปุ่ม <b>คำนวณ</b> เพื่อดูรายการวัตถุดิบทั้งหมดที่ต้องเตรียม น้ำหนักรวม และค่าใช้จ่ายในการคราฟ</span></li>
+      <li><span class="howto-step-num">3</span><span>ใช้ "รายการตรวจสอบ" (Checklist) ด้านล่างเพื่อติ๊กเช็คของที่เตรียมแล้วได้</span></li>
     </ul>
     </div>
 
@@ -126,10 +127,10 @@
     </div>
 
     <div id="craft-howto" class="howto-card">
-    <div class="howto-title">🎒 วิธีการใช้งานแท็บคราฟเบนโตะ</div>
-    <ul>
-      <li>ระบุน้ำหนักกระเป๋า (kg) ปัจจุบันของคุณที่สามารถรองรับของได้</li>
-      <li>กดปุ่ม <b>"คำนวณ"</b> เพื่อดูว่าด้วยน้ำหนักกระเป๋าเท่านี้ คุณสามารถเบิกของมาคราฟเบนโตะแต่ละชนิดได้สูงสุดกี่ชุดต่อรอบ</li>
+    <div class="howto-title"><span class="howto-icon">🎒</span>วิธีการใช้งานแท็บคราฟเบนโตะ</div>
+    <ul class="howto-steps">
+      <li><span class="howto-step-num">1</span><span>ระบุน้ำหนักกระเป๋า (kg) ปัจจุบันของคุณที่สามารถรองรับของได้</span></li>
+      <li><span class="howto-step-num">2</span><span>กดปุ่ม <b>คำนวณ</b> เพื่อดูว่าด้วยน้ำหนักกระเป๋าเท่านี้ คุณสามารถเบิกของมาคราฟเบนโตะแต่ละชนิดได้สูงสุดกี่ชุดต่อรอบ</span></li>
     </ul>
     </div>
 
@@ -142,7 +143,7 @@
   <div class="page" id="page-process">
     <div class="card">
       <div class="card-title">ข้อมูลการแปรรูป</div>
-      <div class="input-grid-2">
+      <div class="input-grid-3">
         <div class="field">
           <label>จำนวนวัตถุดิบที่ยังไม่แปรรูป (ชิ้น)</label>
           <input type="number" id="rawQty" value="0" min="0">
@@ -152,6 +153,11 @@
           <label>น้ำหนักกระเป๋า (kg)</label>
           <input type="number" id="bagWeight" value="0" min="0" step="0.1">
           <div class="hint">น้ำหนักที่รับได้</div>
+        </div>
+        <div class="field">
+          <label>น้ำหนักของที่ยังไม่แปรรูป (kg/ชิ้น)</label>
+          <input type="number" id="rawItemWeight" value="0.2" min="0.01" step="0.01">
+          <div class="hint">น้ำหนักต่อชิ้นของวัตถุดิบดิบ</div>
         </div>
       </div>
 
@@ -168,7 +174,7 @@
           <div class="hint">Output - แพ็คที่ได้ออกมา</div>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--text-soft);margin-top:8px;">น้ำหนักของที่ยังไม่แปรรูป 0.2 kg/ชิ้น</div>
+
 
       <div class="btn-row">
         <button class="btn btn-primary" onclick="calcProcess()">คำนวณ</button>
@@ -177,11 +183,11 @@
     </div>
 
     <div id="process-howto" class="howto-card">
-    <div class="howto-title">⚙️ วิธีการใช้งานแท็บแปรรูปวัตถุดิบ</div>
-    <ul>
-      <li>ใส่จำนวน <b>วัตถุดิบที่ยังไม่แปรรูป</b> ทั้งหมดที่คุณมี และ <b>น้ำหนักกระเป๋า</b> ที่รับได้</li>
-      <li>ตั้งค่าอัตราการแปรรูป (เช่น ใส่ของที่ยังไม่แปรรูป 4 ชิ้น ได้ออกมา 2 แพ็ค)</li>
-      <li>กดปุ่ม <b>"คำนวณ"</b> เพื่อดูสรุปว่าต้องเดินแปรรูปทั้งหมดกี่รอบ และมีของที่ยังไม่แปรรูปเหลือเศษหรือไม่</li>
+    <div class="howto-title"><span class="howto-icon">⚙️</span>วิธีการใช้งานแท็บแปรรูปวัตถุดิบ</div>
+    <ul class="howto-steps">
+      <li><span class="howto-step-num">1</span><span>ใส่จำนวน <b>วัตถุดิบที่ยังไม่แปรรูป</b> ทั้งหมดที่คุณมี และ <b>น้ำหนักกระเป๋า</b> ที่รับได้</span></li>
+      <li><span class="howto-step-num">2</span><span>ตั้งค่าอัตราการแปรรูป (เช่น ใส่ของที่ยังไม่แปรรูป 4 ชิ้น ได้ออกมา 2 แพ็ค)</span></li>
+      <li><span class="howto-step-num">3</span><span>กดปุ่ม <b>คำนวณ</b> เพื่อดูสรุปว่าต้องเดินแปรรูปทั้งหมดกี่รอบ และมีของที่ยังไม่แปรรูปเหลือเศษหรือไม่</span></li>
     </ul>
     </div>
 
@@ -201,7 +207,7 @@
       <div class="section-title">รายละเอียดแต่ละรอบ</div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>รอบ</th><th>ของดิบที่แปรรูป</th><th>แพ็คที่ได้</th></tr></thead>
+          <thead><tr><th>รอบ</th><th>ของที่ยังไม่แปรรูป</th><th>แพ็คที่ได้</th></tr></thead>
           <tbody id="rounds-body"></tbody>
         </table>
       </div>
